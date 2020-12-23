@@ -11,7 +11,7 @@ BIBCOMPILE=$(grep BIBCOMPILE $1 | xargs)
 DOCTYPE=$(grep DOCTYPE $1 | xargs)
 ACRONYMS=$(grep ACRONYMS $1 | xargs)
 GLOSSARY=$(grep GLOSSARY $1 | xargs)
-COMPILE=$(grep COMPILE $1 | xargs)
+TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
 
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
@@ -25,7 +25,7 @@ BIBCOMPILE=${BIBCOMPILE#"BIBCOMPILE="}
 DOCTYPE=${DOCTYPE#"DOCTYPE="}
 ACRONYMS=${ACRONYMS#"ACRONYMS="}
 GLOSSARY=${GLOSSARY#"GLOSSARY="}
-COMPILE=${COMPILE#"COMPILE="}
+TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
 
 rm /tmp/latex-files-*
 
@@ -83,21 +83,20 @@ else
     echo "Copy complete"
 fi
 
-
-# Copy latex folder locally
-cp -r "$LATEXFOLDER" ./latex
-
-if [ "$BIBCOMPILE" == "biber" ]
+if [ "$TEXCOMPILE" != "defer" ]
 then
-    echo "Using Biber"
-    cp biber.sh ./latex/compile.sh
-else
-    echo "Using Bibtex"
-    cp bibtex.sh ./latex/compile.sh
-fi
+    # Copy latex folder locally
+    cp -r "$LATEXFOLDER" ./latex
 
-if [ "$COMPILE" != "true" ]
-then
+    if [ "$BIBCOMPILE" == "biber" ]
+    then
+        echo "Using Biber"
+        cp biber.sh ./latex/compile.sh
+    else
+        echo "Using Bibtex"
+        cp bibtex.sh ./latex/compile.sh
+    fi
+
     cd ./latex
     ./compile.sh "$LATEXENTRY"
     cp main.pdf "$PDF"
