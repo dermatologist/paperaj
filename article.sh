@@ -7,6 +7,7 @@ CHAPTER=$(grep CHAPTER $1 | xargs)
 LATEXFOLDER=$(grep LATEXFOLDER $1 | xargs)
 LATEXENTRY=$(grep LATEXENTRY $1 | xargs)
 PDF=$(grep PDF $1 | xargs)
+BIBCOMPILE=$(grep BIBCOMPILE $1 | xargs)
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
 DOCX=${DOCX#"DOCX="}
@@ -15,11 +16,12 @@ CHAPTER=${CHAPTER#"CHAPTER="}
 LATEXFOLDER=${LATEXFOLDER#"LATEXFOLDER="}
 LATEXENTRY=${LATEXENTRY#"LATEXENTRY="}
 PDF=${PDF#"PDF="}
+BIBCOMPILE=${BIBCOMPILE#"BIBCOMPILE="}
 
 rm /tmp/latex-files-*
 
 pandoc -i "$DOCX" --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
-addimagetag.sh /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
+./addimagetag.sh /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
 pandoc -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
 echo "Conversion Complete"
 cat /tmp/latex-files-temp-2.tex | sed -e 's/\\hypertarget{.*}{\%//g' > /tmp/latex-files-temp-5.tex
@@ -33,10 +35,21 @@ cp /tmp/latex-files-00a "$CHAPTER"
 
 # Copy latex folder locally
 cp -r "$LATEXFOLDER" ./latex
-cp compile.sh ./latex
+
+if [ "$BIBCOMPILE" == "biber" ]
+then
+    echo "Using Biber"
+    cp biber.sh ./latex/compile.sh
+else
+    echo "Using Bibtex"
+    cp bibtex.sh ./latex/compile.sh
+fi
+
+
 cd ./latex
-./compile.sh "$LATEXENTRY" "$PDF"
+./compile.sh "$LATEXENTRY"
+cp main.pdf "$PDF"
 cd ..
-rm -rf latex
+rm -rf ./latex
 
 echo "Processing complete"

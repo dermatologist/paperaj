@@ -8,4 +8,3 @@ biber main
 latex --interaction=batchmode main
 latex --interaction=batchmode main
 pdflatex --interaction=batchmode main
-mv main.pdf $2
