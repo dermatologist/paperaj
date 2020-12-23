@@ -2,3 +2,5 @@ main.*
 *.aux
 !main.tex
 *.pdf
+*.env
+latex/*
