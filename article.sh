@@ -11,6 +11,7 @@ BIBCOMPILE=$(grep BIBCOMPILE $1 | xargs)
 DOCTYPE=$(grep DOCTYPE $1 | xargs)
 ACRONYMS=$(grep ACRONYMS $1 | xargs)
 GLOSSARY=$(grep GLOSSARY $1 | xargs)
+COMPILE=$(grep COMPILE $1 | xargs)
 
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
@@ -24,6 +25,7 @@ BIBCOMPILE=${BIBCOMPILE#"BIBCOMPILE="}
 DOCTYPE=${DOCTYPE#"DOCTYPE="}
 ACRONYMS=${ACRONYMS#"ACRONYMS="}
 GLOSSARY=${GLOSSARY#"GLOSSARY="}
+COMPILE=${COMPILE#"COMPILE="}
 
 rm /tmp/latex-files-*
 
@@ -47,34 +49,34 @@ else
     csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' {12}
     echo "Processing complete"
     cat /tmp/latex-files-01 | sed -e '1,2d' > /tmp/latex-files-01a
-    cp /tmp/latex-files-01a "$LATEXFOLDER/introduction.tex"
+    cp /tmp/latex-files-01a "$LATEXFOLDER/chapters/introduction.tex"
     cat /tmp/latex-files-02 | sed -e '1,2d' > /tmp/latex-files-02a
-    cp /tmp/latex-files-02a "$LATEXFOLDER/review_of_literature.tex"
+    cp /tmp/latex-files-02a "$LATEXFOLDER/chapters/review_of_literature.tex"
     cat /tmp/latex-files-03 | sed -e '1,2d' > /tmp/latex-files-03a
-    cp /tmp/latex-files-03a "$LATEXFOLDER/aims_objectives.tex"
+    cp /tmp/latex-files-03a "$LATEXFOLDER/chapters/aims_objectives.tex"
     cat /tmp/latex-files-04 | sed -e '1,2d' > /tmp/latex-files-04a
-    cp /tmp/latex-files-04a "$LATEXFOLDER/materials_methods.tex"
+    cp /tmp/latex-files-04a "$LATEXFOLDER/chapters/materials_methods.tex"
     cat /tmp/latex-files-05 | sed -e '1,2d' > /tmp/latex-files-05a
-    cp /tmp/latex-files-05a "$LATEXFOLDER/results.tex"
+    cp /tmp/latex-files-05a "$LATEXFOLDER/chapters/results.tex"
     cat /tmp/latex-files-06 | sed -e '1,2d' > /tmp/latex-files-06a
-    cp /tmp/latex-files-06a "$LATEXFOLDER/discussion.tex"
+    cp /tmp/latex-files-06a "$LATEXFOLDER/chapters/discussion.tex"
     cat /tmp/latex-files-07 | sed -e '1,2d' > /tmp/latex-files-07a
-    cp /tmp/latex-files-07a "$LATEXFOLDER/conclusion.tex"
+    cp /tmp/latex-files-07a "$LATEXFOLDER/chapters/conclusion.tex"
     echo "\label{Appendix_A}" > /tmp/latex-files-08a
     cat /tmp/latex-files-08 | sed -e '1,2d' >> /tmp/latex-files-08a
-    cp /tmp/latex-files-08a "$LATEXFOLDER/appendix1.tex"
+    cp /tmp/latex-files-08a "$LATEXFOLDER/chapters/appendix1.tex"
     echo "\label{Appendix_B}" > /tmp/latex-files-09a
     cat /tmp/latex-files-09 | sed -e '1,2d' >> /tmp/latex-files-09a
-    cp /tmp/latex-files-09a "$LATEXFOLDER/appendix2.tex"
+    cp /tmp/latex-files-09a "$LATEXFOLDER/chapters/appendix2.tex"
     echo "\label{Appendix_C}" > /tmp/latex-files-10a
     cat /tmp/latex-files-10 | sed -e '1,2d' >> /tmp/latex-files-10a
-    cp /tmp/latex-files-10a "$LATEXFOLDER/appendix3.tex"
+    cp /tmp/latex-files-10a "$LATEXFOLDER/chapters/appendix3.tex"
     echo "\label{Appendix_D}" > /tmp/latex-files-11a
     cat /tmp/latex-files-11 | sed -e '1,2d' >> /tmp/latex-files-11a
-    cp /tmp/latex-files-11a "$LATEXFOLDER/appendix4.tex"
+    cp /tmp/latex-files-11a "$LATEXFOLDER/chapters/appendix4.tex"
     echo "\label{Appendix_E}" > /tmp/latex-files-12a
     cat /tmp/latex-files-12 | sed -e '1,2d' >> /tmp/latex-files-12a
-    cp /tmp/latex-files-12a "$LATEXFOLDER/appendix5.tex"
+    cp /tmp/latex-files-12a "$LATEXFOLDER/chapters/appendix5.tex"
     # Last file with references is discarded
     cp "$ACRONYMS" "$LATEXFOLDER"
     cp "$GLOSSARY" "$LATEXFOLDER"
@@ -94,11 +96,13 @@ else
     cp bibtex.sh ./latex/compile.sh
 fi
 
-
-cd ./latex
-./compile.sh "$LATEXENTRY"
-cp main.pdf "$PDF"
-cd ..
-rm -rf ./latex
+if [ "$COMPILE" != "true" ]
+then
+    cd ./latex
+    ./compile.sh "$LATEXENTRY"
+    cp main.pdf "$PDF"
+    cd ..
+    rm -rf ./latex
+fi
 
 echo "Processing complete"
