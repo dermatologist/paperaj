@@ -1,4 +1,5 @@
-with open('samples/ai-derm-bibtex.bib') as bib, open('samples/ai-derm-bibtex.puml', 'w') as puml:
+import sys
+with open(sys.argv[1]) as bib, open(sys.argv[2], 'w') as puml:
     puml.write("@startmindmap myMindMap\n")
     puml.write("* Mindmap\n")
     title = ""

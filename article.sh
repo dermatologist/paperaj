@@ -12,6 +12,7 @@ DOCTYPE=$(grep DOCTYPE $1 | xargs)
 ACRONYMS=$(grep ACRONYMS $1 | xargs)
 GLOSSARY=$(grep GLOSSARY $1 | xargs)
 TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
+MINDMAP=$(grep MINDMAP $1 | xargs)
 
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
@@ -26,6 +27,7 @@ DOCTYPE=${DOCTYPE#"DOCTYPE="}
 ACRONYMS=${ACRONYMS#"ACRONYMS="}
 GLOSSARY=${GLOSSARY#"GLOSSARY="}
 TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
+MINDMAP=${MINDMAP#"MINDMAP="}
 
 rm /tmp/latex-files-*
 
@@ -105,3 +107,9 @@ then
 fi
 
 echo "Processing complete"
+
+if [ "$MINDMAP" == "create" ]
+    echo "Creating mindmap"
+    python parsebib.py "$BIBLIO" "$BIBLIO.puml"
+    java -jar plantuml.jar "$BIBLIO.puml"
+fi
