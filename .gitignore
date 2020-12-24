@@ -4,3 +4,5 @@ main.*
 *.pdf
 *.env
 latex/*
+samples/*
+.venv
