@@ -13,6 +13,7 @@ ACRONYMS=$(grep ACRONYMS $1 | xargs)
 GLOSSARY=$(grep GLOSSARY $1 | xargs)
 TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
 MINDMAP=$(grep MINDMAP $1 | xargs)
+CITETAG=$(grep CITETAG $1 | xargs)
 
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
@@ -28,6 +29,7 @@ ACRONYMS=${ACRONYMS#"ACRONYMS="}
 GLOSSARY=${GLOSSARY#"GLOSSARY="}
 TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
 MINDMAP=${MINDMAP#"MINDMAP="}
+CITETAG=${CITETAG#"CITETAG="}
 
 rm /tmp/latex-files-*
 
@@ -37,7 +39,12 @@ pandoc -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --col
 echo "Conversion Complete"
 cat /tmp/latex-files-temp-2.tex | sed -e 's/\\hypertarget{.*}{\%//g' > /tmp/latex-files-temp-5.tex
 cat /tmp/latex-files-temp-5.tex | sed -e 's/\\label{.*}//g' > /tmp/latex-files-temp-6a.tex
-cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.cite\\{/\\citep{/g' > /tmp/latex-files-temp-6b.tex
+if [ "$CITETAG" != "citep" ]
+then
+    cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.cite\\{/\\cite{/g' > /tmp/latex-files-temp-6b.tex
+else
+    cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.cite\\{/\\citep{/g' > /tmp/latex-files-temp-6b.tex
+fi
 cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
 python images.py /tmp/latex-files-temp-6.tex /tmp/latex-files-temp-7.tex
 
