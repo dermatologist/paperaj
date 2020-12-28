@@ -109,6 +109,7 @@ fi
 echo "Processing complete"
 
 if [ "$MINDMAP" == "create" ]
+then
     echo "Creating mindmap"
     python parsebib.py "$BIBLIO" "$BIBLIO.puml"
     java -jar plantuml.jar "$BIBLIO.puml"
