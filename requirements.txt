@@ -1,1 +1,2 @@
-frontmatter
+markdown
+markdown-full-yaml-metadata
