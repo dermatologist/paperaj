@@ -15,6 +15,8 @@ TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
 MINDMAP=$(grep MINDMAP $1 | xargs)
 CITETAG=$(grep CITETAG $1 | xargs)
 ABSTRACT=$(grep ABSTRACT $1 | xargs)
+TITLE=$(grep TITLE $1 | xargs)
+AUTHOR=$(grep AUTHOR $1 | xargs)
 
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
@@ -32,12 +34,16 @@ TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
 MINDMAP=${MINDMAP#"MINDMAP="}
 CITETAG=${CITETAG#"CITETAG="}
 ABSTRACT=${ABSTRACT#"ABSTRACT="}
+TITLE=${TITLE#"TITLE="}
+AUTHOR=${AUTHOR#"AUTHOR="}
 
 rm /tmp/latex-files-*
 # -s adds abstract
 pandoc -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
 # abstract
-cat /tmp/latex-files-temp-1.md | sed -n '/abstract:/,/author/p' | sed 's/abstract:/\\begin\{abstract\}/' | sed "s/author:.*/\\\end\{abstract\}/" | sed 's/\%/\\\%/g' > "$ABSTRACT"
+# cat /tmp/latex-files-temp-1.md | sed -n '/abstract:/,/author/p' | sed 's/abstract:/\\begin\{abstract\}/' | sed "s/author:.*/\\\end\{abstract\}/" | sed 's/\%/\\\%/g' > "$ABSTRACT"
+python -W ignore metadata.py /tmp/latex-files-temp-1.md /tmp/latex-files-temp-1m.md "$TITLE" "$AUTHOR"
+pandoc -i /tmp/latex-files-temp-1m.md -o "$ABSTRACT"
 
 ./addimagetag.sh /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
 pandoc -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
@@ -58,6 +64,7 @@ then
     csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' # Remove references
     cat /tmp/latex-files-00 | sed -e '1,2d' > /tmp/latex-files-00a
     cp /tmp/latex-files-00a "$CHAPTER"
+    cp "$BIBLIO" "$LATEXFOLDER"
 
 else
     csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' {12}
@@ -92,6 +99,7 @@ else
     cat /tmp/latex-files-12 | sed -e '1,2d' >> /tmp/latex-files-12a
     cp /tmp/latex-files-12a "$LATEXFOLDER/chapters/appendix5.tex"
     # Last file with references is discarded
+    cp "$BIBLIO" "$LATEXFOLDER"
     cp "$ACRONYMS" "$LATEXFOLDER"
     cp "$GLOSSARY" "$LATEXFOLDER"
     echo "Copy complete"
