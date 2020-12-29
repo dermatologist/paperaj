@@ -39,14 +39,14 @@ AUTHOR=${AUTHOR#"AUTHOR="}
 
 rm /tmp/latex-files-*
 # -s adds abstract
-~/bin/pandoc -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
+pandoc -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
 # abstract
 # cat /tmp/latex-files-temp-1.md | sed -n '/abstract:/,/author/p' | sed 's/abstract:/\\begin\{abstract\}/' | sed "s/author:.*/\\\end\{abstract\}/" | sed 's/\%/\\\%/g' > "$ABSTRACT"
 python metadata.py /tmp/latex-files-temp-1.md /tmp/latex-files-temp-1m.md "$TITLE" "$AUTHOR"
-~/bin/pandoc -i /tmp/latex-files-temp-1m.md -o "$ABSTRACT"
+pandoc -i /tmp/latex-files-temp-1m.md -o "$ABSTRACT"
 
 ./addimagetag.sh /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
-~/bin/pandoc -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
+pandoc -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
 echo "Conversion Complete"
 cat /tmp/latex-files-temp-2.tex | sed -e 's/\\hypertarget{.*}{\%//g' > /tmp/latex-files-temp-5.tex
 cat /tmp/latex-files-temp-5.tex | sed -e 's/\\label{.*}//g' > /tmp/latex-files-temp-6a.tex
