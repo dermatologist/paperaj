@@ -3,10 +3,30 @@ import re
 import sys
 count = 0
 latex_rotate = False
+twocol_figure = False
 to_write=[]
 with open(sys.argv[1]) as fp:
     for line in fp:
         count += 1
+
+        # two column figure
+        if(line.startswith("Figure ")):
+            caption = line.strip().split(":")
+            caption_figure = caption[0].replace(" ", "_")
+            if "TWO_COLUMN" in caption[1]:
+                twocol_figure = True
+            caption_text = caption[1].replace("TWO_COLUMN", "").strip()
+            line=""
+
+        if(line.startswith("\\begin{figure}") and twocol_figure):
+            line = line.replace("{figure}", "{figure*}")
+
+
+        if(line.startswith("\\end{figure}") and twocol_figure):
+            line = line.replace("{figure}", "{figure*}")
+            twocol_figure = False
+
+        # sideways figure
         if(line.startswith("Figure ")):
             caption = line.strip().split(":")
             caption_figure = caption[0].replace(" ", "_")
