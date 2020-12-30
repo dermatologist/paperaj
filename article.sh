@@ -12,9 +12,7 @@ GLOSSARY=$(grep GLOSSARY $1 | xargs)
 TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
 MINDMAP=$(grep MINDMAP $1 | xargs)
 CITETAG=$(grep CITETAG $1 | xargs)
-ABSTRACT=$(grep ABSTRACT $1 | xargs)
-TITLE=$(grep TITLE $1 | xargs)
-AUTHOR=$(grep AUTHOR $1 | xargs)
+
 
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
@@ -29,17 +27,15 @@ GLOSSARY=${GLOSSARY#"GLOSSARY="}
 TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
 MINDMAP=${MINDMAP#"MINDMAP="}
 CITETAG=${CITETAG#"CITETAG="}
-ABSTRACT=${ABSTRACT#"ABSTRACT="}
-TITLE=${TITLE#"TITLE="}
-AUTHOR=${AUTHOR#"AUTHOR="}
 
 rm /tmp/latex-files-*
 # -s adds abstract
 pandoc -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
 # abstract
 # cat /tmp/latex-files-temp-1.md | sed -n '/abstract:/,/author/p' | sed 's/abstract:/\\begin\{abstract\}/' | sed "s/author:.*/\\\end\{abstract\}/" | sed 's/\%/\\\%/g' > "$ABSTRACT"
-python metadata.py /tmp/latex-files-temp-1.md /tmp/latex-files-temp-1m.md "$TITLE" "$AUTHOR"
-pandoc -i /tmp/latex-files-temp-1m.md -o "$ABSTRACT"
+mkdir "$LATEXFOLDER/paperaj"
+python metadata.py /tmp/latex-files-temp-1.md /tmp/latex-files-temp-1m.md "$LATEXFOLDER/paperaj/title.tex" "$LATEXFOLDER/paperaj/author.tex"
+pandoc -i /tmp/latex-files-temp-1m.md -o "$LATEXFOLDER/paperaj/abstract.tex"
 
 ./addimagetag.sh /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
 pandoc -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
@@ -67,7 +63,7 @@ do
     echo "Handling section: $i"
     if test -f "/tmp/latex-files-$i"; then
         cat /tmp/latex-files-$i | sed -e '1,2d' > /tmp/latex-files-$ia
-        cp /tmp/latex-files-$ia "$LATEXFOLDER/chapter-$i"
+        cp /tmp/latex-files-$ia "$LATEXFOLDER/paperaj/chapter-$i"
     fi
 done
 cp "$BIBLIO" "$LATEXFOLDER"
