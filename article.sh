@@ -3,12 +3,10 @@
 # Export the vars in .env into your shell:
 DOCX=$(grep DOCX $1 | xargs)
 BIBLIO=$(grep BIBLIO $1 | xargs)
-CHAPTER=$(grep CHAPTER $1 | xargs)
 LATEXFOLDER=$(grep LATEXFOLDER $1 | xargs)
 LATEXENTRY=$(grep LATEXENTRY $1 | xargs)
 PDF=$(grep PDF $1 | xargs)
 BIBCOMPILE=$(grep BIBCOMPILE $1 | xargs)
-DOCTYPE=$(grep DOCTYPE $1 | xargs)
 ACRONYMS=$(grep ACRONYMS $1 | xargs)
 GLOSSARY=$(grep GLOSSARY $1 | xargs)
 TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
@@ -22,12 +20,10 @@ AUTHOR=$(grep AUTHOR $1 | xargs)
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
 DOCX=${DOCX#"DOCX="}
 BIBLIO=${BIBLIO#"BIBLIO="}
-CHAPTER=${CHAPTER#"CHAPTER="}
 LATEXFOLDER=${LATEXFOLDER#"LATEXFOLDER="}
 LATEXENTRY=${LATEXENTRY#"LATEXENTRY="}
 PDF=${PDF#"PDF="}
 BIBCOMPILE=${BIBCOMPILE#"BIBCOMPILE="}
-DOCTYPE=${DOCTYPE#"DOCTYPE="}
 ACRONYMS=${ACRONYMS#"ACRONYMS="}
 GLOSSARY=${GLOSSARY#"GLOSSARY="}
 TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
@@ -59,51 +55,24 @@ fi
 cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
 python images.py /tmp/latex-files-temp-6.tex /tmp/latex-files-temp-7.tex
 
-if [ "$DOCTYPE" != "thesis" ]
-then
-    csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' # Remove references
-    cat /tmp/latex-files-00 | sed -e '1,2d' > /tmp/latex-files-00a
-    cp /tmp/latex-files-00a "$CHAPTER"
-    cp "$BIBLIO" "$LATEXFOLDER"
-
-else
-    csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' {12}
-    echo "Processing complete"
-    cat /tmp/latex-files-01 | sed -e '1,2d' > /tmp/latex-files-01a
-    cp /tmp/latex-files-01a "$LATEXFOLDER/chapters/introduction.tex"
-    cat /tmp/latex-files-02 | sed -e '1,2d' > /tmp/latex-files-02a
-    cp /tmp/latex-files-02a "$LATEXFOLDER/chapters/review_of_literature.tex"
-    cat /tmp/latex-files-03 | sed -e '1,2d' > /tmp/latex-files-03a
-    cp /tmp/latex-files-03a "$LATEXFOLDER/chapters/aims_objectives.tex"
-    cat /tmp/latex-files-04 | sed -e '1,2d' > /tmp/latex-files-04a
-    cp /tmp/latex-files-04a "$LATEXFOLDER/chapters/materials_methods.tex"
-    cat /tmp/latex-files-05 | sed -e '1,2d' > /tmp/latex-files-05a
-    cp /tmp/latex-files-05a "$LATEXFOLDER/chapters/results.tex"
-    cat /tmp/latex-files-06 | sed -e '1,2d' > /tmp/latex-files-06a
-    cp /tmp/latex-files-06a "$LATEXFOLDER/chapters/discussion.tex"
-    cat /tmp/latex-files-07 | sed -e '1,2d' > /tmp/latex-files-07a
-    cp /tmp/latex-files-07a "$LATEXFOLDER/chapters/conclusion.tex"
-    echo "\label{Appendix_A}" > /tmp/latex-files-08a
-    cat /tmp/latex-files-08 | sed -e '1,2d' >> /tmp/latex-files-08a
-    cp /tmp/latex-files-08a "$LATEXFOLDER/chapters/appendix1.tex"
-    echo "\label{Appendix_B}" > /tmp/latex-files-09a
-    cat /tmp/latex-files-09 | sed -e '1,2d' >> /tmp/latex-files-09a
-    cp /tmp/latex-files-09a "$LATEXFOLDER/chapters/appendix2.tex"
-    echo "\label{Appendix_C}" > /tmp/latex-files-10a
-    cat /tmp/latex-files-10 | sed -e '1,2d' >> /tmp/latex-files-10a
-    cp /tmp/latex-files-10a "$LATEXFOLDER/chapters/appendix3.tex"
-    echo "\label{Appendix_D}" > /tmp/latex-files-11a
-    cat /tmp/latex-files-11 | sed -e '1,2d' >> /tmp/latex-files-11a
-    cp /tmp/latex-files-11a "$LATEXFOLDER/chapters/appendix4.tex"
-    echo "\label{Appendix_E}" > /tmp/latex-files-12a
-    cat /tmp/latex-files-12 | sed -e '1,2d' >> /tmp/latex-files-12a
-    cp /tmp/latex-files-12a "$LATEXFOLDER/chapters/appendix5.tex"
-    # Last file with references is discarded
-    cp "$BIBLIO" "$LATEXFOLDER"
-    cp "$ACRONYMS" "$LATEXFOLDER"
-    cp "$GLOSSARY" "$LATEXFOLDER"
-    echo "Copy complete"
-fi
+# Split file into section chapters. Last one will be references
+csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/'
+for i in {0..15} # upto 15 sections
+do
+    size=${#i}
+    if [ $size == 1 ]
+    then
+        i="0${i}"  # the format is latex-files-0x. 0 added for i has onle one digit
+    fi
+    echo "Handling section: $i"
+    if test -f "/tmp/latex-files-$i"; then
+        cat /tmp/latex-files-$i | sed -e '1,2d' > /tmp/latex-files-$ia
+        cp /tmp/latex-files-$ia "$LATEXFOLDER/chapter-$i"
+    fi
+done
+cp "$BIBLIO" "$LATEXFOLDER"
+cp "$ACRONYMS" "$LATEXFOLDER"
+cp "$GLOSSARY" "$LATEXFOLDER"
 
 if [ "$TEXCOMPILE" != "defer" ]
 then
