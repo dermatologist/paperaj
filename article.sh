@@ -63,7 +63,7 @@ do
     echo "Handling section: $i"
     if test -f "/tmp/latex-files-$i"; then
         cat /tmp/latex-files-$i | sed -e '1,2d' > /tmp/latex-files-$ia
-        cp /tmp/latex-files-$ia "$LATEXFOLDER/paperaj/chapter-$i"
+        cp /tmp/latex-files-$ia "$LATEXFOLDER/paperaj/chapter-$i.tex"
     fi
 done
 cp "$BIBLIO" "$LATEXFOLDER"
