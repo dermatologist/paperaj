@@ -52,7 +52,7 @@ cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.citet\\{/\\citet{/g
 python images.py /tmp/latex-files-temp-6.tex /tmp/latex-files-temp-7.tex
 
 # Split file into section chapters. Last one will be references
-csplit -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/'
+csplit -k -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' '{15}'
 for i in {0..15} # upto 15 sections
 do
     size=${#i}
