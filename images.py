@@ -13,9 +13,9 @@ with open(sys.argv[1]) as fp:
         if(line.startswith("Figure ")):
             caption = line.strip().split(":")
             caption_figure = caption[0].replace(" ", "_")
-            if "TWO_COLUMN" in caption[1]:
+            if "TWOCOLUMN" in caption[1]:
                 twocol_figure = True
-            caption_text = caption[1].replace("TWO_COLUMN", "").strip()
+            caption_text = caption[1].replace("TWOCOLUMN", "").strip()
             line=""
 
         if(line.startswith("\\begin{figure}") and twocol_figure):
