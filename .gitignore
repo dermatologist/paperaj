@@ -6,3 +6,5 @@ main.*
 latex/*
 samples/*
 .venv
+.doc
+.docx
