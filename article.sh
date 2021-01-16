@@ -64,7 +64,8 @@ do
     fi
     echo "Handling section: $i"
     if test -f "/tmp/latex-files-$i"; then
-        cat /tmp/latex-files-$i | sed -e '1,2d' > /tmp/latex-files-$ia
+        # second part removes the session breat ie H1 header in italics
+        cat /tmp/latex-files-$i | sed -e '1,2d' | sed -e 's/\\section{\\texorpdfstring{\\emph{.*//g' > /tmp/latex-files-$ia
         cp /tmp/latex-files-$ia "$LATEXFOLDER/paperaj/chapter-$i.tex"
     fi
 done
