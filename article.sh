@@ -94,6 +94,11 @@ then
     rm -rf ./latex
 fi
 
+echo "Creating cleaned version"
+arxiv_latex_cleaner "$LATEXFOLDER" --verbose
+rm -rf "$LATEXFOLDER/clean"
+mv "${LATEXFOLDER}_arXiv" "$LATEXFOLDER/clean"
+
 echo "Processing complete"
 
 if [ "$MINDMAP" == "create" ]

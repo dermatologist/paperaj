@@ -1,2 +1,3 @@
 markdown
 markdown-full-yaml-metadata
+arxiv-latex-cleaner
