@@ -80,7 +80,7 @@
 
 \begin{abstract}
 
-\IfFileExists{paperaj/abstract}{\input{paperaj/chapter-01}}{abstract here}
+\IfFileExists{paperaj/abstract.tex}{\input{paperaj/abstract}}{abstract here}
 
 \end{abstract}
 %\keywords{First keyword \and Second keyword \and More} % (optional)
@@ -90,17 +90,9 @@
 ] % Method A for two-column formatting
 
 
-\section{Introduction}
 
-\IfFileExists{paperaj/chapter-01}{\input{paperaj/chapter-01}}{}
-\IfFileExists{paperaj/chapter-02}{\input{paperaj/chapter-02}}{}
-\IfFileExists{paperaj/chapter-03}{\input{paperaj/chapter-03}}{}
-\IfFileExists{paperaj/chapter-04}{\input{paperaj/chapter-04}}{}
-\IfFileExists{paperaj/chapter-05}{\input{paperaj/chapter-05}}{}
-\IfFileExists{paperaj/chapter-06}{\input{paperaj/chapter-06}}{}
-\IfFileExists{paperaj/chapter-07}{\input{paperaj/chapter-07}}{}
-\IfFileExists{paperaj/chapter-08}{\input{paperaj/chapter-08}}{}
-\IfFileExists{paperaj/chapter-09}{\input{paperaj/chapter-09}}{}
+\IfFileExists{inclusions.tex}{\input{inclusions}}{ The chapters here. }
+
 
 %%%%%%%%%%%%%%   Bibliography   %%%%%%%%%%%%%%
 \normalsize

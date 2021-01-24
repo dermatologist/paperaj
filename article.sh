@@ -103,8 +103,10 @@ echo "Creating ArXiv version"
 rm -rf "$LATEXFOLDER/arxiv"
 cp -r arxiv "$LATEXFOLDER/arxiv"
 cp -r "$LATEXFOLDER/clean/paperaj" "$LATEXFOLDER/arxiv/paperaj"
+cp -r "$LATEXFOLDER/clean/media" "$LATEXFOLDER/arxiv/media"
 cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
-cp "$LATEXFOLDER/auth_affl.tex" "$LATEXFOLDER/arxiv/authors.tex"
+cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
+cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 
 echo "Compiling arxiv"
 if [ "$TEXCOMPILE" != "defer" ]
