@@ -99,6 +99,36 @@ arxiv_latex_cleaner "$LATEXFOLDER" --verbose
 rm -rf "$LATEXFOLDER/clean"
 mv "${LATEXFOLDER}_arXiv" "$LATEXFOLDER/clean"
 
+echo "Creating ArXiv version"
+rm -rf "$LATEXFOLDER/arxiv"
+cp -r arxiv "$LATEXFOLDER/arxiv"
+cp -r "$LATEXFOLDER/clean/paperaj" "$LATEXFOLDER/arxiv/paperaj"
+cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
+cp "$LATEXFOLDER/auth_affl.tex" "$LATEXFOLDER/arxiv/authors.tex"
+
+echo "Compiling arxiv"
+if [ "$TEXCOMPILE" != "defer" ]
+then
+    # Copy latex folder locally
+    cp -r "$LATEXFOLDER/arxiv" ./latex
+
+    if [ "$BIBCOMPILE" == "biber" ]
+    then
+        echo "Using Biber"
+        cp biber.sh ./latex/compile.sh
+    else
+        echo "Using Bibtex"
+        cp bibtex.sh ./latex/compile.sh
+    fi
+
+    cd ./latex
+    ./compile.sh main.tex
+    cp main.pdf "${PDF}.arxiv.pdf"
+    cd ..
+    rm -rf ./latex
+fi
+
+
 echo "Processing complete"
 
 if [ "$MINDMAP" == "create" ]
