@@ -126,6 +126,7 @@ then
     cd ./latex
     ./compile.sh main.tex
     cp main.pdf "${PDF}.arxiv.pdf"
+    cp main.bbl "$LATEXFOLDER/arxiv/main.bbl"
     cd ..
     rm -rf ./latex
 fi
