@@ -16,3 +16,6 @@
 * '**_' adds title
 
 * Add the above to the Zotero notes for references
+
+## Notebook to pdf
+* jupyter-nbconvert --to pdf acnode.ipynb
