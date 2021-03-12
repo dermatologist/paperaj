@@ -51,8 +51,9 @@ with open(sys.argv[1]) as fp:
         if(line.startswith("\\textbackslash\\textbackslash\\textbackslash")):
             line = line.replace("\\textbackslash\\textbackslash\\textbackslash ", "\\")
 
-        if(line.startswith("\caption{image}")):
+        if(line.startswith("\caption{image}") or line.startswith("\caption{Diagram Description automatically generated}")):
             line = line.replace("image", caption_text)
+            line = line.replace("Diagram Description automatically generated", caption_text)
             to_write.append(line)
             to_write.append("")
             line = "\label{" + caption_figure + "} "
