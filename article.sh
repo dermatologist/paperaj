@@ -51,7 +51,9 @@ else
     cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.cite\\{/\\citep{/g' > /tmp/latex-files-temp-6b.tex
 fi
 cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
-python images.py /tmp/latex-files-temp-6.tex /tmp/latex-files-temp-7.tex
+# Remove line breaks added on 3/21/2021
+awk ' /^$/ { print "\n"; } /./ { printf("%s ", $0); } END { print ""; } ' /tmp/latex-files-temp-6.tex > /tmp/latex-files-temp-6c.tex
+python images.py /tmp/latex-files-temp-6c.tex /tmp/latex-files-temp-7.tex
 
 # Split file into section chapters. Last one will be references
 csplit -k -f /tmp/latex-files- /tmp/latex-files-temp-7.tex '/\\section{\\texorpdfstring{\\emph{/' '{15}'
