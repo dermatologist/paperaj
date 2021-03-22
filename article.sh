@@ -52,7 +52,7 @@ else
 fi
 cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
 # Remove line breaks added on 3/21/2021
-awk ' /^$/ { print "\n"; } /./ { printf("%s ", $0); } END { print ""; } ' /tmp/latex-files-temp-6.tex > /tmp/latex-files-temp-6c.tex
+awk ' /^\\/ { printf("%s \n", $0); } /^$/ { print "\n"; }  /^[^\\].*/ { printf("%s ", $0); } END { print ""; } ' /tmp/latex-files-temp-6.tex > /tmp/latex-files-temp-6c.tex
 python images.py /tmp/latex-files-temp-6c.tex /tmp/latex-files-temp-7.tex
 
 # Split file into section chapters. Last one will be references
