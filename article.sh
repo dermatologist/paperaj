@@ -49,11 +49,11 @@ cat /tmp/latex-files-temp-2.tex | sed -e 's/\\hypertarget{.*}{\%//g' > /tmp/late
 cat /tmp/latex-files-temp-5.tex | sed -e 's/\\label{.*}//g' > /tmp/latex-files-temp-6a.tex
 if [ "$CITETAG" != "citep" ]
 then
-    cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.cite\\{/\\cite{/g' > /tmp/latex-files-temp-6b.tex
+    cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.*cite\\{/\\cite{/g' > /tmp/latex-files-temp-6b.tex
 else
-    cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.cite\\{/\\citep{/g' > /tmp/latex-files-temp-6b.tex
+    cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.*cite\\{/\\citep{/g' > /tmp/latex-files-temp-6b.tex
 fi
-cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
+cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.*citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
 # Remove line breaks added on 3/21/2021
 awk ' /^\\/ { printf("%s \n", $0); } /^$/ { print "\n"; }  /^[^\\].*/ { printf("%s ", $0); } END { print ""; } ' /tmp/latex-files-temp-6.tex > /tmp/latex-files-temp-6c.tex
 python images.py /tmp/latex-files-temp-6c.tex /tmp/latex-files-temp-7.tex
