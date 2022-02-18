@@ -113,6 +113,11 @@ cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
 cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
 cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 
+"""
+Creates flat version for Springer
+Requires flatten.bak in $LATEXFOLDER
+Requires sn-jnl.cls and the sn-vancouver.cls or similar.
+"""
 echo "Creating flat version"
 if [  -d "$LATEXFOLDER/flatten" ]
 then
