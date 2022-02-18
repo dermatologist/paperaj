@@ -113,23 +113,25 @@ cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
 cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
 cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 
-echo "Creating Springer flat version"
-if [  -d "$LATEXFOLDER/springer" ]
+echo "Creating flat version"
+if [  -d "$LATEXFOLDER/flatten" ]
 then
-    cp -a "$LATEXFOLDER/clean/paperaj/." "$LATEXFOLDER/springer"
-    cp -a "$LATEXFOLDER/clean/media/." "$LATEXFOLDER/springer"
-    cp -a "$LATEXFOLDER/clean/inclusions.tex" "$LATEXFOLDER/springer/inclusions.tex"
-    cp "$BIBLIO" "$LATEXFOLDER/springer/references.bib"
-    #cp "$LATEXFOLDER/$LATEXENTRY" "$LATEXFOLDER/springer/main.tex"
-    find "$LATEXFOLDER/springer" -type f -name "*.tex" -exec sed -i 's/media\///g' {} +
-    find "$LATEXFOLDER/springer" -type f -name "*.tex" -exec sed -i 's/paperaj\///g' {} +
-    find "$LATEXFOLDER/springer" -type f -name "*.tex" -exec sed -i 's/citep/cite/g' {} +
+    cp -a "$LATEXFOLDER/clean/paperaj/." "$LATEXFOLDER/flatten"
+    cp -a "$LATEXFOLDER/clean/media/." "$LATEXFOLDER/flatten"
+    cp -a "$LATEXFOLDER/clean/inclusions.tex" "$LATEXFOLDER/flatten/inclusions.tex"
+    cp "$BIBLIO" "$LATEXFOLDER/flatten/references.bib"
+    #cp "$LATEXFOLDER/$LATEXENTRY" "$LATEXFOLDER/flatten/main.tex"
+    find "$LATEXFOLDER/flatten" -type f -name "*.tex" -exec sed -i 's/media\///g' {} +
+    find "$LATEXFOLDER/flatten" -type f -name "*.tex" -exec sed -i 's/paperaj\///g' {} +
+    #find "$LATEXFOLDER/flatten" -type f -name "*.tex" -exec sed -i 's/citep/cite/g' {} +
     CURRENT_DIR=`pwd`
-    cd "$LATEXFOLDER/springer"
+    cd "$LATEXFOLDER/flatten"
     python "$CURRENT_DIR/flatten.py" inclusions.tex inclusions-expanded.tex
     rm inclusions.tex
     mv inclusions-expanded.tex inclusions.tex
-    python "$CURRENT_DIR/flatten.py" _main.tex main.tex
+    python "$CURRENT_DIR/flatten.py" "$LATEXFOLDER/flatten.bak" main.bak
+    rm *.tex
+    mv main.bak main.tex
     cd $CURRENT_DIR
 fi
 
