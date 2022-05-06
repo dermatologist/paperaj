@@ -100,9 +100,12 @@ then
 fi
 
 echo "Creating cleaned version"
-arxiv_latex_cleaner "$LATEXFOLDER" --verbose
 rm -rf "$LATEXFOLDER/clean"
+arxiv_latex_cleaner "$LATEXFOLDER" --verbose
 mv "${LATEXFOLDER}_arXiv" "$LATEXFOLDER/clean"
+cp -n -r "$LATEXFOLDER/paperaj/" "$LATEXFOLDER/clean/"
+cp -n -r "$LATEXFOLDER/media/" "$LATEXFOLDER/clean/"
+
 
 echo "Creating ArXiv version"
 rm -rf "$LATEXFOLDER/arxiv"
