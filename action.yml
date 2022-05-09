@@ -2,6 +2,13 @@
 name: 'Paperaj'
 description: 'Convert docx to latex'
 author: 'Bell Eapen'
+inputs:
+  env-file:  # id of input
+    description: 'env file'
+    required: true
+    default: 'paperaj.env'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.env-file }}

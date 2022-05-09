@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # activate venv
-source .venv/bin/activate
+# source .venv/bin/activate
 
 # Export the vars in .env into your shell:
 DOCX=$(grep DOCX $1 | xargs)
