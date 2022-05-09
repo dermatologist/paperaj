@@ -1,0 +1,7 @@
+# action.yml
+name: 'Paperaj'
+description: 'Convert docx to latex'
+author: 'Bell Eapen'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
