@@ -42,7 +42,7 @@ mkdir "$LATEXFOLDER/paperaj"
 python metadata.py /tmp/latex-files-temp-1.md /tmp/latex-files-temp-1m.md "$LATEXFOLDER/paperaj/title.tex" "$LATEXFOLDER/paperaj/author.tex"
 "${PANDOCPATH}pandoc" -i /tmp/latex-files-temp-1m.md -o "$LATEXFOLDER/paperaj/abstract.tex"
 
-./addimagetag.sh /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
+sed -e 's/!\[\](media/!\[image\](media/g' /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
 "${PANDOCPATH}pandoc" -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
 echo "Conversion Complete"
 cat /tmp/latex-files-temp-2.tex | sed -e 's/\\hypertarget{.*}{\%//g' > /tmp/latex-files-temp-5.tex
@@ -91,6 +91,7 @@ then
         echo "Using Bibtex"
         cp bibtex.sh ./latex/compile.sh
     fi
+    chmod +x ./latex/compile.sh
 
     cd ./latex
     ./compile.sh "$LATEXENTRY"
@@ -116,11 +117,11 @@ cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
 cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
 cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 
-"""
-Creates flat version for Springer
-Requires flatten.bak in $LATEXFOLDER
-Requires sn-jnl.cls and the sn-vancouver.cls or similar.
-"""
+
+# Creates flat version for Springer
+# Requires flatten.bak in $LATEXFOLDER
+# Requires sn-jnl.cls and the sn-vancouver.cls or similar.
+
 echo "Creating flat version"
 if [  -d "$LATEXFOLDER/flatten" ]
 then
