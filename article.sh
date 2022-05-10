@@ -144,6 +144,9 @@ then
     cd $CURRENT_DIR
 fi
 
+cp -n -r "$LATEXFOLDER/arxiv/" "$LATEXFOLDER/clean/"
+cp -n -r "$LATEXFOLDER/flatten/" "$LATEXFOLDER/clean/"
+
 echo "Compiling arxiv"
 if [ "$TEXCOMPILE" != "defer" ]
 then
