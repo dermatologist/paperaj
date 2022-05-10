@@ -17,7 +17,7 @@ MINDMAP=$(grep MINDMAP $1 | xargs)
 CITETAG=$(grep CITETAG $1 | xargs)
 PANDOCPATH=$(grep PANDOCPATH $1 | xargs)
 
-
+cd /workdir
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
 DOCX=${DOCX#"DOCX="}
