@@ -106,7 +106,9 @@ arxiv_latex_cleaner "$LATEXFOLDER" --verbose
 mv "${LATEXFOLDER}_arXiv" "$LATEXFOLDER/clean"
 cp -n -r "$LATEXFOLDER/paperaj/" "$LATEXFOLDER/clean/"
 cp -n -r "$LATEXFOLDER/media/" "$LATEXFOLDER/clean/"
-cp -n "$LATEXFOLDER/*.*" "$LATEXFOLDER/clean/"
+cp -n "$LATEXFOLDER/*.tex" "$LATEXFOLDER/clean/"
+cp -n "$LATEXFOLDER/*.bib" "$LATEXFOLDER/clean/"
+cp -n "$LATEXFOLDER/*.sty" "$LATEXFOLDER/clean/"
 
 
 echo "Creating ArXiv version"
@@ -123,9 +125,9 @@ cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 # Requires flatten.bak in $LATEXFOLDER
 # Requires sn-jnl.cls and the sn-vancouver.cls or similar.
 
-echo "Creating flat version"
 if [  -d "$LATEXFOLDER/flatten" ]
 then
+    echo "Creating flat version"
     cp -a "$LATEXFOLDER/clean/paperaj/." "$LATEXFOLDER/flatten"
     cp -a "$LATEXFOLDER/clean/media/." "$LATEXFOLDER/flatten"
     cp -a "$LATEXFOLDER/clean/inclusions.tex" "$LATEXFOLDER/flatten/inclusions.tex"
