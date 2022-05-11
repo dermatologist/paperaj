@@ -1,5 +1,12 @@
 \documentclass{article}
 
+\makeatletter
+\def\input@path{{/github/workspace/clean/}{/github/workspace/}{.}}
+\makeatother
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{graphicx, color}
+\graphicspath{{fig/}{.}{/github/workspace/}}
 
 
 \usepackage{arxiv}
@@ -14,15 +21,11 @@
 \usepackage{microtype}      % microtypography
 \usepackage{lipsum}		% Can be removed after putting your text content
 
-\usepackage{graphicx}
-
 \title{\input{paperaj/title}}
 
 
-\author{
- \input{authors.tex}
+\author{\input{authors.tex}}
 
-}
 
 \begin{document}
 \maketitle
