@@ -1,83 +1,47 @@
-
-\documentclass[twocolumn, switch]{article} %
-
-\usepackage{preprint}
-
-\usepackage{amsmath, amsthm, amssymb, amsfonts}
-
-\usepackage[numbers,square]{natbib}
-\bibliographystyle{unsrtnat}
-
-\usepackage[utf8]{inputenc}	%
-\usepackage[T1]{fontenc}	%
-\usepackage{xcolor}		%
-\usepackage[colorlinks = true,
-            linkcolor = purple,
-            urlcolor  = blue,
-            citecolor = cyan,
-            anchorcolor = black]{hyperref}	%
-\usepackage{booktabs} 		%
-\usepackage{nicefrac}		%
-\usepackage{microtype}		%
-\usepackage{lineno}		%
-\usepackage{float}			%
-
-\usepackage{lipsum}		%
-
-\usepackage{listings} %
-
-\usepackage{newfloat}
-\DeclareFloatingEnvironment[name={Supplementary Figure}]{suppfigure}
-\usepackage{sidecap}
-\sidecaptionvpos{figure}{c}
-
-\usepackage{titlesec}
-\titlespacing\section{0pt}{12pt plus 3pt minus 3pt}{1pt plus 1pt minus 1pt}
-\titlespacing\subsection{0pt}{10pt plus 3pt minus 3pt}{1pt plus 1pt minus 1pt}
-\titlespacing\subsubsection{0pt}{8pt plus 3pt minus 3pt}{1pt plus 1pt minus 1pt}
+\documentclass{article}
 
 
-\usepackage{multicol}
-\usepackage{longtable}
-\usepackage{booktabs}
-\usepackage{makecell}
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+
+\usepackage{graphicx}
 
 \title{\input{paperaj/title}}
 
-\usepackage{xwatermark}
-\newwatermark[firstpage,color=gray!90,angle=0,scale=0.28, xpos=0in,ypos=-5in]{*correspondence: \texttt{eapenbp@mcmaster.ca}}
 
-\usepackage{authblk}
-\input{authors.tex}
+\author{
+ \input{authors.tex}
 
-
-
+}
 
 \begin{document}
-
-\twocolumn[ %
-  \begin{@twocolumnfalse} %
-
 \maketitle
+
 
 \begin{abstract}
 
 \IfFileExists{paperaj/abstract.tex}{\input{paperaj/abstract}}{abstract here}
 
 \end{abstract}
-\vspace{0.35cm}
 
-  \end{@twocolumnfalse} %
-] %
-
-
+\keywords{\IfFileExists{../keywords.tex}{\input{../keywords.tex}}{ The keywords here. }}
 
 \IfFileExists{inclusions.tex}{\input{inclusions}}{ The chapters here. }
 
 
-\normalsize
+%\clearpage
+
+\bibliographystyle{unsrt}
 \bibliography{references}
-
-
 
 \end{document}
