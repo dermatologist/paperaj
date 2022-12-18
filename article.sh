@@ -106,6 +106,7 @@ arxiv_latex_cleaner "$LATEXFOLDER" --verbose
 mv "${LATEXFOLDER}_arXiv" "$LATEXFOLDER/clean"
 cp -n -r "$LATEXFOLDER/paperaj/" "$LATEXFOLDER/clean/"
 cp -n -r "$LATEXFOLDER/media/" "$LATEXFOLDER/clean/"
+cp "$BIBLIO" "$LATEXFOLDER/clean/references.bib"
 # cp -n "$LATEXFOLDER/*.tex" "$LATEXFOLDER/clean/"
 # cp -n "$LATEXFOLDER/*.bib" "$LATEXFOLDER/clean/"
 # cp -n "$LATEXFOLDER/*.sty" "$LATEXFOLDER/clean/"
