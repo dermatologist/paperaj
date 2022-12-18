@@ -1,11 +1,15 @@
 # paperaj
 
+Paperaj is a combination of bash and python scripts for converting MS word document to a latex document for academic journals. You can use any journal template for latex compilation. This can be used as a standalone script (needs pandoc and latex installed) or as a GitHub action.
 
-[![paperaj](https://github.com/dermatologist/paperaj/blob/master/paperaj-workflow.png)](https://github.com/dermatologist/paperaj/blob/master/paperaj-workflow.png)
+[![paperaj](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)
 
 
 ## Usage
 
+* Use this [github template](https://github.com/dermatologist/paperaj-template)
+* Add the docx, bib and tex files.
+* set the names of docx, bib and latex entry in paperaj.env file
 * Use TWO_COLUMN or LATEXROTATE in captions of figure
 * FIGURE_ or TABLE_ for inline ref
 
