@@ -22,6 +22,7 @@ TEMPLATEX="/tmp/latex"
 
 # for github actions
 [ -d "$LATEXFOLDER" ] && cd "$LATEXFOLDER"
+[ -d /workdir ] && cd /workdir
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
 DOCX=${DOCX#"DOCX="}
