@@ -117,6 +117,7 @@ cp -r arxiv "$LATEXFOLDER/arxiv"
 cp -r "$LATEXFOLDER/clean/paperaj" "$LATEXFOLDER/arxiv/paperaj"
 cp -r "$LATEXFOLDER/clean/media" "$LATEXFOLDER/arxiv/media"
 cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
+cp "$BIBLIO" "$LATEXFOLDER/references.bib"
 cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
 cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 
