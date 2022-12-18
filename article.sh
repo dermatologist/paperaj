@@ -17,7 +17,11 @@ MINDMAP=$(grep MINDMAP $1 | xargs)
 CITETAG=$(grep CITETAG $1 | xargs)
 PANDOCPATH=$(grep PANDOCPATH $1 | xargs)
 
-cd /workdir
+# ASSIGN VARIABLES
+TEMPLATEX="/tmp/latex"
+
+# for github actions
+[ -d "$LATEXFOLDER" ] && cd "$LATEXFOLDER"
 
 # Remove XX= prefix - https://stackoverflow.com/questions/16623835/remove-a-fixed-prefix-suffix-from-a-string-in-bash
 DOCX=${DOCX#"DOCX="}
@@ -34,17 +38,23 @@ CITETAG=${CITETAG#"CITETAG="}
 PANDOCPATH=${PANDOCPATH#"PANDOCPATH="}
 
 rm /tmp/latex-files-*
-# -s adds abstract
+[ ! -d "$LATEXFOLDER/paperaj" ] && mkdir "$LATEXFOLDER/paperaj"
+
+
+# Extract media
+"${PANDOCPATH}pandoc" --extract-media $LATEXFOLDER/ -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
+
+
+
+# Adds abstract
 "${PANDOCPATH}pandoc" -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
-# abstract
-# cat /tmp/latex-files-temp-1.md | sed -n '/abstract:/,/author/p' | sed 's/abstract:/\\begin\{abstract\}/' | sed "s/author:.*/\\\end\{abstract\}/" | sed 's/\%/\\\%/g' > "$ABSTRACT"
-mkdir "$LATEXFOLDER/paperaj"
 python metadata.py /tmp/latex-files-temp-1.md /tmp/latex-files-temp-1m.md "$LATEXFOLDER/paperaj/title.tex" "$LATEXFOLDER/paperaj/author.tex"
 "${PANDOCPATH}pandoc" -i /tmp/latex-files-temp-1m.md -o "$LATEXFOLDER/paperaj/abstract.tex"
 
 sed -e 's/!\[\](media/!\[image\](media/g' /tmp/latex-files-temp-1.md > /tmp/latex-files-temp-11.md
 "${PANDOCPATH}pandoc" -i /tmp/latex-files-temp-11.md --bibliography="$BIBLIO" --wrap=auto --columns=140 --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-2.tex
 echo "Conversion Complete"
+
 cat /tmp/latex-files-temp-2.tex | sed -e 's/\\hypertarget{.*}{\%//g' > /tmp/latex-files-temp-5.tex
 cat /tmp/latex-files-temp-5.tex | sed -e 's/\\label{.*}//g' > /tmp/latex-files-temp-6a.tex
 if [ "$CITETAG" != "citep" ]
@@ -54,6 +64,7 @@ else
     cat /tmp/latex-files-temp-6a.tex | sed -e 's/\\textbackslash.*cite\\{/\\citep{/g' > /tmp/latex-files-temp-6b.tex
 fi
 cat /tmp/latex-files-temp-6b.tex | sed -e 's/\\textbackslash.*citet\\{/\\citet{/g' > /tmp/latex-files-temp-6.tex
+
 # Remove line breaks added on 3/21/2021
 awk ' /^\\/ { printf("%s \n", $0); } /^$/ { print "\n"; }  /^[^\\].*/ { printf("%s ", $0); } END { print ""; } ' /tmp/latex-files-temp-6.tex > /tmp/latex-files-temp-6c.tex
 python images.py /tmp/latex-files-temp-6c.tex /tmp/latex-files-temp-7.tex
@@ -74,58 +85,79 @@ do
         cp /tmp/latex-files-$ia "$LATEXFOLDER/paperaj/chapter-$i.tex"
     fi
 done
-cp "$BIBLIO" "$LATEXFOLDER"
-cp "$ACRONYMS" "$LATEXFOLDER"
-cp "$GLOSSARY" "$LATEXFOLDER"
 
+## Copy files
+[ -d "$BIBLIO" ] && cp "$BIBLIO" "$LATEXFOLDER"
+[ -d "$ACRONYMS" ] && cp "$ACRONYMS" "$LATEXFOLDER"
+[ -d "$GLOSSARY" ] && cp "$GLOSSARY" "$LATEXFOLDER"
+cp "$BIBLIO" "$LATEXFOLDER/references.bib"
+
+
+## Create latex if not defer
 if [ "$TEXCOMPILE" != "defer" ]
 then
     # Copy latex folder locally
-    cp -r "$LATEXFOLDER" ./latex
+    cp -r "$LATEXFOLDER" "$TEMPLATEX"
 
     if [ "$BIBCOMPILE" == "biber" ]
     then
         echo "Using Biber"
-        cp biber.sh ./latex/compile.sh
+        cp biber.sh "$TEMPLATEX/compile.sh"
     else
         echo "Using Bibtex"
-        cp bibtex.sh ./latex/compile.sh
+        cp bibtex.sh "$TEMPLATEX/compile.sh"
     fi
-    chmod +x ./latex/compile.sh
+    chmod +x "$TEMPLATEX/compile.sh"
 
-    cd ./latex
+    cd "$TEMPLATEX"
     ./compile.sh "$LATEXENTRY"
     cp main.pdf "$PDF"
-    cd ..
-    rm -rf ./latex
+    cd "$LATEXFOLDER"
+    rm -rf "$TEMPLATEX"
 fi
 
 echo "Creating cleaned version"
-rm -rf "$LATEXFOLDER/clean"
+[ -d "$LATEXFOLDER/clean" ] && rm -rf "$LATEXFOLDER/clean"
 arxiv_latex_cleaner "$LATEXFOLDER" --verbose
 mv "${LATEXFOLDER}_arXiv" "$LATEXFOLDER/clean"
 cp -n -r "$LATEXFOLDER/paperaj/" "$LATEXFOLDER/clean/"
 cp -n -r "$LATEXFOLDER/media/" "$LATEXFOLDER/clean/"
 cp "$BIBLIO" "$LATEXFOLDER/clean/references.bib"
-# cp -n "$LATEXFOLDER/*.tex" "$LATEXFOLDER/clean/"
-# cp -n "$LATEXFOLDER/*.bib" "$LATEXFOLDER/clean/"
-# cp -n "$LATEXFOLDER/*.sty" "$LATEXFOLDER/clean/"
 
+if [  -d "$LATEXFOLDER/flatten" ]
+then
+    echo "Creating ArXiv version"
+    [ -d "$LATEXFOLDER/arxiv" ] && rm -rf "$LATEXFOLDER/arxiv"
+    cp -r arxiv "$LATEXFOLDER/arxiv"
+    cp -r "$LATEXFOLDER/clean/paperaj" "$LATEXFOLDER/arxiv/paperaj"
+    cp -r "$LATEXFOLDER/clean/media" "$LATEXFOLDER/arxiv/media"
+    cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
+    cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
+    cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
 
-echo "Creating ArXiv version"
-rm -rf "$LATEXFOLDER/arxiv"
-cp -r arxiv "$LATEXFOLDER/arxiv"
-cp -r "$LATEXFOLDER/clean/paperaj" "$LATEXFOLDER/arxiv/paperaj"
-cp -r "$LATEXFOLDER/clean/media" "$LATEXFOLDER/arxiv/media"
-cp "$BIBLIO" "$LATEXFOLDER/arxiv/references.bib"
-cp "$BIBLIO" "$LATEXFOLDER/references.bib"
-cp "$LATEXFOLDER/authors.tex" "$LATEXFOLDER/arxiv/authors.tex"
-cp "$LATEXFOLDER/inclusions.tex" "$LATEXFOLDER/arxiv/inclusions.tex"
+    echo "Compiling arxiv"
+    if [ "$TEXCOMPILE" != "defer" ]
+    then
+        # Copy latex folder locally
+        cp -r "$LATEXFOLDER/arxiv" "$TEMPLATEX"
 
-
-# Creates flat version for Springer
-# Requires flatten.bak in $LATEXFOLDER
-# Requires sn-jnl.cls and the sn-vancouver.cls or similar.
+        if [ "$BIBCOMPILE" == "biber" ]
+        then
+            echo "Using Biber"
+            cp biber.sh "$TEMPLATEX/compile.sh"
+        else
+            echo "Using Bibtex"
+            cp bibtex.sh "$TEMPLATEX/compile.sh"
+        fi
+        chmod +x "$TEMPLATEX/compile.sh"
+        cd "$TEMPLATEX"
+        ./compile.sh main.tex
+        cp main.pdf "${PDF}.arxiv.pdf"
+        cp main.bbl "$LATEXFOLDER/arxiv/main.bbl"
+        cd "$LATEXFOLDER"
+        rm -rf "$TEMPLATEX"
+    fi
+fi
 
 if [  -d "$LATEXFOLDER/flatten" ]
 then
@@ -149,32 +181,9 @@ then
     cd $CURRENT_DIR
 fi
 
+
 cp -n -r "$LATEXFOLDER/arxiv/" "$LATEXFOLDER/clean/"
 cp -n -r "$LATEXFOLDER/flatten/" "$LATEXFOLDER/clean/"
-
-echo "Compiling arxiv"
-if [ "$TEXCOMPILE" != "defer" ]
-then
-    # Copy latex folder locally
-    cp -r "$LATEXFOLDER/arxiv" ./latex
-
-    if [ "$BIBCOMPILE" == "biber" ]
-    then
-        echo "Using Biber"
-        cp biber.sh ./latex/compile.sh
-    else
-        echo "Using Bibtex"
-        cp bibtex.sh ./latex/compile.sh
-    fi
-
-    cd ./latex
-    ./compile.sh main.tex
-    cp main.pdf "${PDF}.arxiv.pdf"
-    cp main.bbl "$LATEXFOLDER/arxiv/main.bbl"
-    cd ..
-    rm -rf ./latex
-fi
-
 
 echo "Processing complete"
 
