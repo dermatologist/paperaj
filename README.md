@@ -4,18 +4,30 @@ Paperaj is a combination of bash and python scripts for converting MS word docum
 
 [![paperaj](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)
 
+## How it works
+Paperaj creates a set of plain latex files from the word document in the paperaj folder. Images, tables and referencing are supported during the conversion. These plain latex files can be included in the journal's latex template using: ``` \input{filename} ```. See [main.docx](https://github.com/dermatologist/paperaj-public-template/blob/master/main.docx) in the template for examples. Clone this repository only if you want to run this locally (needs pandoc and latex locally). Otherwise just use [this template](https://github.com/dermatologist/paperaj-public-template) that uses this GitHub action and the GitHub will latex-compile your manuscript!
 
 ## Usage
 
+### As GitHub action (recommended)
 * Use this [github template](https://github.com/dermatologist/paperaj-public-template)
 * Use the docx in the template
 * Add bib and tex files.
-* set the names of docx, bib and latex entry in paperaj.env file (full path if you are using locally)
-* run the script (if using locally)
-```
-    ./article.sh paperaj.env
-```
+* set the names of docx, bib and latex entry in paperaj.env file 
 * [This template](https://github.com/dermatologist/paperaj-public-template) generates LaTeX files on push to develop branch and compile to PDF on push to main branch!
+
+### Local (requires pandoc and latex installed)
+
+* set the full path of docx, bib and latex entry in paperaj.env file 
+* run the script
+
+```
+
+    ./article.sh paperaj.env
+
+```
+
+
 ### Arguments in .env file
 
 * BIBLIO=references.bib
@@ -38,6 +50,7 @@ Paperaj is a combination of bash and python scripts for converting MS word docum
 ### Referencing
 
 \cite{AuthorYEAR} inline
+
 #### Using Zotero
 
 ### Flatten
