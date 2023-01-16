@@ -53,13 +53,19 @@ Paperaj creates a set of plain latex files from the word document in the paperaj
 
 #### Using Zotero
 
-### Flatten
+* [Use this csl](word2latex-pandoc.csl)
+
+### Flatten into single latex file without inclusions
+
+* Just create a folder called **flatten**.
 
 ### arXiv
 
+* Add required latex files to **arxiv** folder.
 
 ### Clean version for submission
 
+* The clean latex files without latex comments for submission is in the **clean** folder.
 
 ### Mindmapping
 
