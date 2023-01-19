@@ -1,11 +1,13 @@
-# paperaj
+# paperaj - Write jounal papers in word and convert to LaTeX for submission!
 
 Paperaj is a combination of bash and python scripts for converting MS word document to a latex document for academic journals. You can use any journal template for latex compilation. This can be used as a standalone script (needs pandoc and latex installed) or as a GitHub action. **When used as a GitHub action, there is no need to clone this repository.** Just clone [this template](https://github.com/dermatologist/paperaj-public-template) that uses this GitHub action.
 
 [![paperaj](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)
 
 ## How it works
-Paperaj creates a set of plain latex files from the word document in the paperaj folder. Images, tables and referencing are supported during the conversion. These plain latex files can be included in the journal's latex template using: ``` \input{filename} ```. See [main.docx](https://github.com/dermatologist/paperaj-public-template/blob/master/main.docx) in the template for examples. Clone this repository only if you want to run this locally (needs pandoc and latex locally). Otherwise just use [this template](https://github.com/dermatologist/paperaj-public-template) that uses this GitHub action and the GitHub will latex-compile your manuscript!
+Paperaj creates a set of plain latex files from the word document in the paperaj folder. Images, tables and referencing are supported during the conversion. These plain latex files can be included in the journal's latex template using: ``` \input{filename} ```. See [main.docx](https://github.com/dermatologist/paperaj-public-template/blob/master/main.docx) in the template for word document format. See [main.tex](https://github.com/dermatologist/paperaj-public-template/blob/master/main.tex) in the template to see how you can include paperaj generated latex files in the latex entry file. Clone this repository only if you want to run this locally (needs pandoc and latex locally). Otherwise just use [this template](https://github.com/dermatologist/paperaj-public-template) that uses this GitHub action and the GitHub will latex-compile your manuscript!
+
+**See [main.docx](https://github.com/dermatologist/paperaj-public-template/blob/master/main.docx) for formatting instructions.**
 
 ## Usage
 
@@ -13,12 +15,12 @@ Paperaj creates a set of plain latex files from the word document in the paperaj
 * Use this [github template](https://github.com/dermatologist/paperaj-public-template)
 * Use the docx in the template
 * Add bib and tex files.
-* set the names of docx, bib and latex entry in paperaj.env file 
+* set the names of docx, bib and latex entry in paperaj.env file
 * [This template](https://github.com/dermatologist/paperaj-public-template) generates LaTeX files on push to develop branch and compile to PDF on push to main branch!
 
 ### Local (requires pandoc and latex installed)
 
-* set the full path of docx, bib and latex entry in paperaj.env file 
+* set the full path of docx, bib and latex entry in paperaj.env file
 * run the script
 
 ```
@@ -82,3 +84,9 @@ Paperaj creates a set of plain latex files from the word document in the paperaj
 
 ### Extract highlights from PDF
 [pdfannots](https://pypi.org/project/pdfannots/)
+
+## Give us a star ⭐️
+If you find this project useful, give us a star. It helps others discover the project.
+## Contributors
+
+* [Bell Eapen](https://nuchange.ca) | [![Twitter Follow](https://img.shields.io/twitter/follow/beapen?style=social)](https://twitter.com/beapen)
