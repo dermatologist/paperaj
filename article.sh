@@ -1,8 +1,5 @@
 #!/bin/bash
-
-# activate venv
-# source .venv/bin/activate
-
+# This script converts a Word document to a LaTeX document
 # Export the vars in .env into your shell:
 DOCX=$(grep DOCX $1 | xargs)
 BIBLIO=$(grep BIBLIO $1 | xargs)
@@ -16,6 +13,7 @@ TEXCOMPILE=$(grep TEXCOMPILE $1 | xargs)
 MINDMAP=$(grep MINDMAP $1 | xargs)
 CITETAG=$(grep CITETAG $1 | xargs)
 PANDOCPATH=$(grep PANDOCPATH $1 | xargs)
+PLANTUMLPATH=$(grep PLANTUMLPATH $1 | xargs)
 
 # ASSIGN VARIABLES
 TEMPLATEX="/tmp/latex"
@@ -37,6 +35,7 @@ TEXCOMPILE=${TEXCOMPILE#"TEXCOMPILE="}
 MINDMAP=${MINDMAP#"MINDMAP="}
 CITETAG=${CITETAG#"CITETAG="}
 PANDOCPATH=${PANDOCPATH#"PANDOCPATH="}
+PLANTUMLPATH=${PLANTUMLPATH#"PLANTUMLPATH="}
 
 rm /tmp/latex-files-*
 [ ! -d "$LATEXFOLDER/paperaj" ] && mkdir "$LATEXFOLDER/paperaj"
@@ -192,5 +191,5 @@ if [ "$MINDMAP" == "create" ]
 then
     echo "Creating mindmap"
     python parsebib.py "$BIBLIO" "$BIBLIO.puml"
-    java -jar plantuml.jar "$BIBLIO.puml"
+    java -jar "${PLANTUMLPATH}plantuml.jar" "$BIBLIO.puml"
 fi
