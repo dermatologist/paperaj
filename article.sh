@@ -17,6 +17,7 @@ PLANTUMLPATH=$(grep PLANTUMLPATH $1 | xargs)
 
 # ASSIGN VARIABLES
 TEMPLATEX="/tmp/latex"
+CURRENT_DIR=`pwd`
 
 # for github actions
 [ -d "$LATEXFOLDER" ] && cd "$LATEXFOLDER"
@@ -170,7 +171,6 @@ then
     find "$LATEXFOLDER/flatten" -type f -name "*.tex" -exec sed -i 's/media\///g' {} +
     find "$LATEXFOLDER/flatten" -type f -name "*.tex" -exec sed -i 's/paperaj\///g' {} +
     #find "$LATEXFOLDER/flatten" -type f -name "*.tex" -exec sed -i 's/citep/cite/g' {} +
-    CURRENT_DIR=`pwd`
     cd "$LATEXFOLDER/flatten"
     python "$CURRENT_DIR/flatten.py" inclusions.tex inclusions-expanded.tex
     rm inclusions.tex
@@ -190,6 +190,6 @@ echo "Processing complete"
 if [ "$MINDMAP" == "create" ]
 then
     echo "Creating mindmap"
-    python parsebib.py "$BIBLIO" "$BIBLIO.puml"
+    python "${CURRENT_DIR}/parsebib.py" "$BIBLIO" "$BIBLIO.puml"
     java -jar "${PLANTUMLPATH}plantuml.jar" "$BIBLIO.puml"
 fi
