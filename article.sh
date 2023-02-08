@@ -14,6 +14,7 @@ MINDMAP=$(grep MINDMAP $1 | xargs)
 CITETAG=$(grep CITETAG $1 | xargs)
 PANDOCPATH=$(grep PANDOCPATH $1 | xargs)
 PLANTUMLPATH=$(grep PLANTUMLPATH $1 | xargs)
+TECTONIC=$(grep TECTONIC $1 | xargs)
 
 # ASSIGN VARIABLES
 TEMPLATEX="/tmp/latex"
@@ -37,15 +38,13 @@ MINDMAP=${MINDMAP#"MINDMAP="}
 CITETAG=${CITETAG#"CITETAG="}
 PANDOCPATH=${PANDOCPATH#"PANDOCPATH="}
 PLANTUMLPATH=${PLANTUMLPATH#"PLANTUMLPATH="}
+TECTONIC=${TECTONIC#"TECTONIC="}
 
 rm /tmp/latex-files-*
 [ ! -d "$LATEXFOLDER/paperaj" ] && mkdir "$LATEXFOLDER/paperaj"
 
-
 # Extract media
 "${PANDOCPATH}pandoc" --extract-media $LATEXFOLDER/ -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
-
-
 
 # Adds abstract
 "${PANDOCPATH}pandoc" -i "$DOCX" -s --bibliography="$BIBLIO" --wrap=preserve --csl=word2latex-pandoc.csl -o /tmp/latex-files-temp-1.md
@@ -111,7 +110,12 @@ then
     chmod +x "$TEMPLATEX/compile.sh"
 
     cd "$TEMPLATEX"
-    ./compile.sh "$LATEXENTRY"
+    if [ "$TECTONIC" != "yes" ]
+    then
+        ./compile.sh "$LATEXENTRY"
+    else
+        tectonic "$LATEXENTRY"
+    fi
     cp main.pdf "$PDF"
     cd "$LATEXFOLDER"
     rm -rf "$TEMPLATEX"
@@ -152,7 +156,12 @@ then
         fi
         chmod +x "$TEMPLATEX/compile.sh"
         cd "$TEMPLATEX"
-        ./compile.sh main.tex
+        if [ "$TECTONIC" != "yes" ]
+        then
+            ./compile.sh main.tex
+        else
+            tectonic main.tex
+        fi
         cp main.pdf "${PDF}.arxiv.pdf"
         cp main.bbl "$LATEXFOLDER/arxiv/main.bbl"
         cd "$LATEXFOLDER"
