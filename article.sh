@@ -113,10 +113,11 @@ then
     if [ "$TECTONIC" != "yes" ]
     then
         ./compile.sh "$LATEXENTRY"
+        mv "$TEMPLATEX/main.pdf" "$PDF"
     else
         tectonic "$LATEXENTRY"
+        mv "$LATEXFOLDER/main.pdf" "$PDF"
     fi
-    cp main.pdf "$PDF"
     cd "$LATEXFOLDER"
     rm -rf "$TEMPLATEX"
 fi
