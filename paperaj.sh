@@ -44,7 +44,7 @@ python images.py /tmp/latex-files-temp-7a.tex /tmp/latex-files-temp-8.tex
 
 # Split file into section chapters. Last one will be references
 csplit -k -f /tmp/latex-files- /tmp/latex-files-temp-8.tex '/\\section{\\texorpdfstring{\\emph{/' '{15}'
-for i in {0..15} # upto 15 sections
+for i in {0..20} # upto 20 sections
 do
     size=${#i}
     if [ $size == 1 ]
