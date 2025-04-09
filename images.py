@@ -10,15 +10,19 @@ with open(sys.argv[1]) as fp:
         count += 1
 
         # two column figure
-        if(line.startswith("Figure ")):
-            print(f"Line: {line}")
-            caption = line.strip().split(":")
-            caption_figure = caption[0].replace(" ", "_")
-            if "TWOCOLUMN" in caption[1]:
-                twocol_figure = True
-            caption_text = caption[1].replace("TWOCOLUMN", "").strip()
-            print(f"Caption: {caption_text}")
-            line=""
+        try:
+            if(line.startswith("Figure ")):
+                print(f"Line: {line}")
+                caption = line.strip().split(":")
+                caption_figure = caption[0].replace(" ", "_")
+                if "TWOCOLUMN" in caption[1]:
+                    twocol_figure = True
+                caption_text = caption[1].replace("TWOCOLUMN", "").strip()
+                print(f"Caption: {caption_text}")
+                line=""
+        except:
+            print(f"No Caption for figure in: {line}")
+            pass
 
         # if linbe starts with \includegraphics, remove everything between ../ and ///
         if(line.startswith("\\includegraphics")):
@@ -27,7 +31,7 @@ with open(sys.argv[1]) as fp:
                 line = "\\begin{figure*}[h]\n\centering\n" + line + "\n\caption{" + caption_text +"}\n\label{"+caption_figure+"}\n\end{figure*}\n"
             else:
                 line = "\\begin{figure}[h]\n\centering\n" + line + "\n\caption{" + caption_text +"}\n\label{"+caption_figure+"}\n\end{figure}\n"
-                
+
         if(line.startswith("\\begin{figure}") and twocol_figure):
             line = line.replace("{figure}", "{figure*}")
 
@@ -37,13 +41,17 @@ with open(sys.argv[1]) as fp:
             twocol_figure = False
 
         # sideways figure
-        if(line.startswith("Figure ")):
-            caption = line.strip().split(":")
-            caption_figure = caption[0].replace(" ", "_")
-            if "LATEXROTATE" in caption[1]:
-                latex_rotate = True
-            caption_text = caption[1].replace("LATEXROTATE", "").strip()
-            line=""
+        try:
+            if(line.startswith("Figure ")):
+                caption = line.strip().split(":")
+                caption_figure = caption[0].replace(" ", "_")
+                if "LATEXROTATE" in caption[1]:
+                    latex_rotate = True
+                caption_text = caption[1].replace("LATEXROTATE", "").strip()
+                line=""
+        except:
+            print(f"No Caption for figure in: {line}")
+            pass
 
         if(line.startswith("\\begin{figure}") and latex_rotate):
             line = line.replace("{figure}", "{sidewaysfigure}")
