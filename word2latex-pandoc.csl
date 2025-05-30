@@ -1861,15 +1861,12 @@
     </group>
   </macro>
 
-    <macro name="citeKey">
-    <group>
-      <text macro="author-short" text-case="capitalize-first"/>
-      <text macro="issued-year"/>
-    </group>
+  <macro name="citeKey">
+    <text variable="citation-key"/>
   </macro>
   <macro name="author-short">
     <names variable="author">
-      <name form="short" delimiter=" " delimiter-precedes-last="never" et-al-min="1" et-al-use-first="1" et-al-use-last="false"/>
+      <name form="short" initialize-with="true"/>
     </names>
   </macro>
   <macro name="issued-year">
