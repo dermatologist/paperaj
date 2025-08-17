@@ -40,7 +40,7 @@ cat /tmp/latex-files-temp-6d.tex | sed -e 's/\\textbackslash{}tab/\\qquad/g' > /
 
 # Remove line breaks added on 3/21/2021
 awk ' /^\\/ { printf("%s \n", $0); } /^$/ { print "\n"; }  /^[^\\].*/ { printf("%s ", $0); } END { print ""; } ' /tmp/latex-files-temp-7.tex > /tmp/latex-files-temp-7a.tex
-python images.py /tmp/latex-files-temp-7a.tex /tmp/latex-files-temp-8.tex
+uv run python images.py /tmp/latex-files-temp-7a.tex /tmp/latex-files-temp-8.tex
 
 # Split file into section chapters. Last one will be references
 csplit -k -f /tmp/latex-files- /tmp/latex-files-temp-8.tex '/\\section{\\texorpdfstring{\\emph{/' '{15}'
@@ -58,3 +58,6 @@ do
         cp /tmp/latex-files-$ia "$LATEXFOLDER/paperaj-$POSTFIX/chapter-$i.tex"
     fi
 done
+
+# Copy markdown for agentic editing
+cp /tmp/latex-files-temp-11.md "$LATEXFOLDER/paperaj-$POSTFIX/$POSTFIX.md"
