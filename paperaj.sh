@@ -8,6 +8,8 @@ LATEXFOLDER=$2
 FILENAME=${DOCX%.*}
 POSTFIX="${FILENAME: -10}"
 
+# Remove all non alphanumeric characters from $POSTFIX
+POSTFIX=$(echo $POSTFIX | tr -cd '[:alnum:]')
 
 # Exit if no arguments
 if [ $# -eq 0 ]
