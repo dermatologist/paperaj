@@ -1,6 +1,10 @@
-# paperaj - Write jounal papers in word and convert to LaTeX for submission!
+# paperaj - Write journal papers in Word and convert to LaTeX for submission!
 
-Paperaj is a combination of bash and python scripts for converting MS word document to a latex document for academic journals. You can use any journal template for latex compilation. This can be used as a standalone script (needs pandoc and latex installed) or as a GitHub action. **When used as a GitHub action, there is no need to clone this repository.** Just clone [this template](https://github.com/dermatologist/paperaj-public-template) that uses this GitHub action.
+## 📦 Project Deprecated  
+### 🌅 paperaj has been sunset.
+For an improved and actively maintained workflow, switch to 👉 **[paperajcli](https://github.com/dermatologist/paperajcli)**. It offers a smoother Word‑to‑LaTeX experience with better section handling and template integration.
+
+Paperaj is a combination of bash and Python scripts for converting MS word document to a LaTeX document for academic journals. You can use any journal template for LaTeX compilation. This can be used as a standalone script (needs pandoc and LaTeX installed) or as a GitHub action. **When used as a GitHub action, there is no need to clone this repository.** Just clone [this template](https://github.com/dermatologist/paperaj-public-template) that uses this GitHub action.
 
 [![paperaj](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)](https://github.com/dermatologist/paperaj/blob/develop/paperaj.drawio.svg)
 
